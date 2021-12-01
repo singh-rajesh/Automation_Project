@@ -24,4 +24,18 @@ then
 fi
 tar -cvf /tmp/$myname-httpd-logs-$timestamp.tar /var/log/apache2/*.log
 aws s3 cp /tmp/$myname-httpd-logs-$timestamp.tar s3://$s3_bucket/$myname-httpd-logs-$timestamp.tar
+filename="/var/www/html/inventory.html"
+if test -f "$filename"; then
+    echo ""
+else
+        touch $filename
+        echo -e "Log Type\tTime Created\tType\tSize" >> $filename
+fi
+accesssize=$(du -k /var/log/apache2/access.log | cut -f1)
+errorsize=$(du -k /var/log/apache2/error.log | cut -f1)
+othersize=$(du -k /var/log/apache2/other_vhosts_access.log | cut -f1)
+numsum=`expr $accesssize + $errorsize + $othersize`
+echo $numsum
+filesize="$numsum K"
+echo -e "httpd-logs\t$timestamp\ttar\t$filesize" >> $filename
 
