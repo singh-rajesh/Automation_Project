@@ -1,4 +1,4 @@
-#Automation Project
+#Automation Project - Dev Branch
 s3_bucket="s3-course-assign-rajesh"
 timestamp=$(date '+%d%m%Y-%H%M%S')
 
